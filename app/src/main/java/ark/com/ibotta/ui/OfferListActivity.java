@@ -18,6 +18,7 @@ import ark.com.ibotta.R;
 import ark.com.ibotta.RebateApplication;
 import ark.com.ibotta.configuration.Configuration;
 import ark.com.ibotta.model.Offer;
+import ark.com.ibotta.ui.adapter.OfferListAdapter;
 import ark.com.ibotta.utils.RebateFinder;
 
 public class OfferListActivity extends Activity {
@@ -30,8 +31,8 @@ public class OfferListActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_offer_list);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         mRebateFinder = RebateApplication.getRebateFinder();
         mOfferListView = (ListView) findViewById(R.id.list_view_offer);
         // Get the intent to get the query.
@@ -39,6 +40,8 @@ public class OfferListActivity extends Activity {
         double latitude = intent.getDoubleExtra(MainActivity.CURRENT_LATITUDE, Configuration.DENVER_LATITUDE);
         double longitude = intent.getDoubleExtra(MainActivity.CURRENT_LONGITUDE, Configuration.DENVER_LONGITUDE);
         Location location = new Location(Configuration.NETWORK_PROVIDER);
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
         new RebateHandler().execute(location);
     }
     /**
@@ -47,7 +50,7 @@ public class OfferListActivity extends Activity {
      * @param result The results to be presented to the user.
      */
     public void updateViewWithResults(ArrayList<Offer> result) {
-        Log.d("updateViewWithResults", result.toString());
+        Log.d(LOG_TAG, "updateViewWithResults()");
         offerArrayList = result;
         //Add results to listView
         mOfferListView.setAdapter(new OfferListAdapter(mContext, offerArrayList));
@@ -57,7 +60,7 @@ public class OfferListActivity extends Activity {
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
-                parent.removeView(view);
+                parent.removeAllViews();
             }
         }
         setContentView(mOfferListView);

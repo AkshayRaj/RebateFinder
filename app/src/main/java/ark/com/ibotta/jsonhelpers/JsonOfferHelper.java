@@ -1,4 +1,4 @@
-package ark.com.ibotta.json;
+package ark.com.ibotta.jsonhelpers;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,7 +19,7 @@ import ark.com.ibotta.model.Offer;
  * Created by Akshayraj on 10/18/15.
  */
 public class JsonOfferHelper {
-    private static final String LOG_TAG = JsonStoreHelper.class.getSimpleName();
+    private static final String LOG_TAG = JsonOfferHelper.class.getSimpleName();
     private static final String KEY_OFFER_FILE_OBJECT = "offers";
     private static JsonOfferHelper sInstance;
     private static Context mContext; //context required to retrieve json file from assets
@@ -76,7 +76,9 @@ public class JsonOfferHelper {
         while (reader.hasNext()) {
             Offer offer = readOffer(reader);
             if(isNearbyOffer(offer, retailerSet)) {
-                offerList.add(offer);
+                if(offerList.size() <= 10) {
+                    offerList.add(offer);
+                }
             }
         }
         reader.endArray();

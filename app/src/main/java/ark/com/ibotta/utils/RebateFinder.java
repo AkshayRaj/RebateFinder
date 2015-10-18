@@ -2,16 +2,20 @@ package ark.com.ibotta.utils;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ark.com.ibotta.json.JsonOfferHelper;
-import ark.com.ibotta.json.JsonStoreHelper;
+import ark.com.ibotta.jsonhelpers.JsonOfferHelper;
+import ark.com.ibotta.jsonhelpers.JsonStoreHelper;
 import ark.com.ibotta.model.Offer;
 import ark.com.ibotta.model.Store;
 
 public class RebateFinder {
+    private static final String LOG_TAG = RebateFinder.class.getSimpleName();
     private Context mContext;
     private JsonStoreHelper mJsonStoreHelper;
     private JsonOfferHelper mJsonOfferHelper;
@@ -24,18 +28,25 @@ public class RebateFinder {
         mContext = context;
         mJsonStoreHelper = JsonStoreHelper.getInstance(mContext);
         mJsonOfferHelper = JsonOfferHelper.getInstance(mContext);
+        mNearbyStoreList = new ArrayList<Store>();
+        mNearbyRetailerSet = new HashSet<Integer>();
+        mNearbyOfferList = new ArrayList<Offer>();
     }
 
     public List<Offer> getNearbyOffers(Location pCurrentLocation){
+        Log.v(LOG_TAG, "getNearbyOffers()");
         Location currentLocation = pCurrentLocation;
         mNearbyStoreList = mJsonStoreHelper.getNearbyStores(currentLocation);
+        Log.v(LOG_TAG, "mNearbyStoreList.size() " + mNearbyStoreList.size());
         if(mNearbyStoreList == null){
             return null;
         }
         for(Store store : mNearbyStoreList){
             mNearbyRetailerSet.add(store.getRetailerId());
+            Log.v(LOG_TAG, "mNearbyRetailerSet.size() " + mNearbyRetailerSet.size());
         }
         mNearbyOfferList = mJsonOfferHelper.getNearbyOffers(mNearbyRetailerSet);
+        Log.v(LOG_TAG, "mNearbyOfferList.size() " + mNearbyOfferList.size());
         return mNearbyOfferList;
     }
 }

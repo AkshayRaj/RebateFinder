@@ -6,6 +6,7 @@ public class Offer {
     public static final String KEY_ID = "id";
     public static final String KEY_RETAILER_LIST = "retailers";
     public static final String KEY_NAME = "name";
+    public static final String KEY_IMAGE_URL = "";
 
     private int mId;
     private List<Integer> mRetailerList;
@@ -40,7 +41,6 @@ public class Offer {
     public void setName(String name) {
         mName = name;
     }
-
 
     public static class OfferBuilder {
         private int OfferBuilder_mId;
