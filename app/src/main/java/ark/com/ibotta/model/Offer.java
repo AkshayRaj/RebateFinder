@@ -1,4 +1,4 @@
-package ark.com.ibotta.data;
+package ark.com.ibotta.model;
 
 import java.util.List;
 

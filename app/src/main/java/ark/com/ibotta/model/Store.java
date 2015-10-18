@@ -1,4 +1,4 @@
-package ark.com.ibotta.data;
+package ark.com.ibotta.model;
 
 /**
  * Created by Akshayraj on 10/18/15.

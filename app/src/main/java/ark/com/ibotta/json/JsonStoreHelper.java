@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ark.com.ibotta.configuration.Configuration;
-import ark.com.ibotta.data.Store;
+import ark.com.ibotta.model.Store;
 import ark.com.ibotta.location.StoreLocation;
 
 public class JsonStoreHelper {

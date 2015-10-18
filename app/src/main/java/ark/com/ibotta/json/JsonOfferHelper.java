@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import ark.com.ibotta.configuration.Configuration;
-import ark.com.ibotta.data.Offer;
+import ark.com.ibotta.model.Offer;
 
 /**
  * Created by Akshayraj on 10/18/15.

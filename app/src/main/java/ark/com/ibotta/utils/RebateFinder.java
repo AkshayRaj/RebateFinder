@@ -6,13 +6,10 @@ import android.location.Location;
 import java.util.List;
 import java.util.Set;
 
-import ark.com.ibotta.configuration.Configuration;
-import ark.com.ibotta.data.Retailer;
 import ark.com.ibotta.json.JsonOfferHelper;
 import ark.com.ibotta.json.JsonStoreHelper;
-import ark.com.ibotta.data.Offer;
-import ark.com.ibotta.data.Store;
-import ark.com.ibotta.location.StoreLocation;
+import ark.com.ibotta.model.Offer;
+import ark.com.ibotta.model.Store;
 
 public class RebateFinder {
     private Context mContext;
