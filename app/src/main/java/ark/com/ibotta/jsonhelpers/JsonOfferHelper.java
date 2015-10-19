@@ -89,6 +89,9 @@ public class JsonOfferHelper {
         int id = Configuration.INVALID;
         List<Integer> retailerList = new ArrayList<Integer>();
         String name = "";
+        String imageURL = "";
+        String expiration = "";
+        double earningsPotential = Configuration.INVALID;
         reader.beginObject();
         while (reader.hasNext()) {
             String objectKey = reader.nextName();
@@ -98,6 +101,12 @@ public class JsonOfferHelper {
                 retailerList = getRetailerList(reader);
             } else if(objectKey.equals(Offer.KEY_NAME)){
                 name = reader.nextString();
+            } else if(objectKey.equals(Offer.KEY_IMAGE_URL)){
+                imageURL = reader.nextString();
+            } else if(objectKey.equals(Offer.KEY_EARNINGS_POTENTIAL)){
+                earningsPotential = reader.nextDouble();
+            } else if(objectKey.equals(Offer.KEY_EXPIRATION)){
+                expiration = reader.nextString();
             } else{
                 reader.skipValue();
             }
@@ -107,6 +116,9 @@ public class JsonOfferHelper {
                 .setId(id)
                 .setName(name)
                 .setRetailerList(retailerList)
+                .setImageURL(imageURL)
+                .setEarningsPotential(earningsPotential)
+                .setExpiration(expiration)
                 .create();
     }
 

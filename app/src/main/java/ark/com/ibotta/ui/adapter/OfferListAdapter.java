@@ -64,23 +64,25 @@ public class OfferListAdapter extends BaseAdapter {
         }
 
         Offer offer = getItem(position);
-        //new PosterLoader(offerViewHolder.offerImage).execute(offer.getImagePath());
-        offerViewHolder.offerId.setText(String.valueOf(offer.getId()));
+        new PosterLoader(offerViewHolder.offerImage).execute(offer.getImageURL());
         offerViewHolder.offerName.setText(offer.getName());
-
+        offerViewHolder.offerEarningPotential.setText("REBATE: \n" + String.valueOf(offer.getEarningsPotential()));
+        offerViewHolder.offerExpiration.setText("EXPIRES: \n" + offer.getExpiration());
         return convertView;
 
     }
 
     private class OfferViewHolder {
         ImageView offerImage;
-        TextView offerId;
+        TextView offerEarningPotential;
         TextView offerName;
+        TextView offerExpiration;
 
         public OfferViewHolder(View item) {
             offerImage = (ImageView) item.findViewById(R.id.offerIcon);
-            offerId = (TextView) item.findViewById(R.id.offerId);
             offerName = (TextView) item.findViewById(R.id.offerName);
+            offerEarningPotential = (TextView) item.findViewById(R.id.offerEarningPotential);
+            offerExpiration = (TextView) item.findViewById(R.id.offerExpiration);
         }
     }
 }

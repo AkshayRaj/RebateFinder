@@ -1,8 +1,12 @@
 package ark.com.ibotta;
 
+import android.Manifest;
 import android.app.Application;
-import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
+import ark.com.ibotta.location.LocationSensor;
 import ark.com.ibotta.utils.RebateFinder;
 
 /**
@@ -30,6 +34,4 @@ public class RebateApplication extends Application {
     public static RebateFinder getRebateFinder() {
         return mRebateFinder;
     }
-
-
 }

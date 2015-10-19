@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ark.com.ibotta.R;
@@ -37,8 +38,8 @@ public class OfferListActivity extends Activity {
         mOfferListView = (ListView) findViewById(R.id.list_view_offer);
         // Get the intent to get the query.
         Intent intent = getIntent();
-        double latitude = intent.getDoubleExtra(MainActivity.CURRENT_LATITUDE, Configuration.DENVER_LATITUDE);
-        double longitude = intent.getDoubleExtra(MainActivity.CURRENT_LONGITUDE, Configuration.DENVER_LONGITUDE);
+        double latitude = intent.getDoubleExtra(MainActivity.CURRENT_LATITUDE, Configuration.DEFAULT_LATITUDE);
+        double longitude = intent.getDoubleExtra(MainActivity.CURRENT_LONGITUDE, Configuration.DEFAULT_LONGITUDE);
         Location location = new Location(Configuration.NETWORK_PROVIDER);
         location.setLatitude(latitude);
         location.setLongitude(longitude);
@@ -52,6 +53,7 @@ public class OfferListActivity extends Activity {
     public void updateViewWithResults(ArrayList<Offer> result) {
         Log.d(LOG_TAG, "updateViewWithResults()");
         offerArrayList = result;
+        Collections.sort(offerArrayList);
         //Add results to listView
         mOfferListView.setAdapter(new OfferListAdapter(mContext, offerArrayList));
         //Update Activity to show updated View
