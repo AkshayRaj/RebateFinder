@@ -21,9 +21,9 @@ import ark.com.ibotta.location.LocationSensor;
 
 public class MainActivity extends Activity {
 
+    private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 10011;
     public static final String CURRENT_LATITUDE = "CURRENT_LATITUDE";
     public static final String CURRENT_LONGITUDE = "CURRENT_LONGITUDE";
-    private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 10011;
     public static double latitude = Configuration.DEFAULT_LATITUDE; //Denver Latitude
     public static double longitude = Configuration.DEFAULT_LONGITUDE; //Denver Longitude
     private Context mContext;
@@ -49,7 +49,6 @@ public class MainActivity extends Activity {
      */
     public void getNearbyOffers(View view) {
         Intent intent = new Intent(this, OfferListActivity.class);
-
         intent.putExtra(CURRENT_LATITUDE, latitude);
         intent.putExtra(CURRENT_LONGITUDE, longitude);
         startActivity(intent);
