@@ -119,14 +119,8 @@ public class JsonStoreHelper {
     private static boolean isNearbyStore(Store store, Location currentLocation){
         mStoreLocation.setLatitude(store.getLatitude());
         mStoreLocation.setLongitude(store.getLongitude());
-        Log.v(LOG_TAG, "currentLocation_Latitude: " + currentLocation.getLatitude());
-        Log.v(LOG_TAG, "mStoreLocation_Latitude: " + mStoreLocation.getLatitude());
-        Log.v(LOG_TAG, "currentLocation_Longitude: " + currentLocation.getLongitude());
-        Log.v(LOG_TAG, "mStoreLocation_Longitude: " + mStoreLocation.getLongitude());
         float distanceInMeters = currentLocation.distanceTo(mStoreLocation);
-        Log.v(LOG_TAG, "distanceInMeters: " + distanceInMeters);
         int distanceInMiles = Configuration.convertMetersToMiles(distanceInMeters) ;
-        Log.v(LOG_TAG, "distanceInMiles: " + distanceInMiles);
         if(distanceInMiles <= Configuration.NEARBY_RADIUS){
             return true;
         }else {

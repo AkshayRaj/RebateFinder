@@ -35,12 +35,8 @@ public class TabActivity extends FragmentActivity {
     private Context mContext = TabActivity.this;
 
     private Bundle mBundle;
-
     private FragmentTabHost mTabHost;
     private TabHost.OnTabChangeListener mTabChangeListener;
-
-    private ListView mOfferListView;
-    private ProgressBar mProgressBar;
     //public ArrayList<Offer> offerArrayList = new ArrayList<Offer>();
     public RebateFinder mRebateFinder;
 
@@ -49,8 +45,6 @@ public class TabActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
         mBundle = savedInstanceState;
-        mOfferListView = (ListView) findViewById(R.id.list_view_offer);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRebateFinder = RebateApplication.getRebateFinder();
         //setup tabHost
         mTabHost = (FragmentTabHost) findViewById(R.id.tabhost);
@@ -65,62 +59,12 @@ public class TabActivity extends FragmentActivity {
             @Override
             public void onTabChanged(String tabId) {
                 if(tabId == TAB3){
-                    Location location = new Location(Configuration.NETWORK_PROVIDER);
-                    location.setLatitude(Configuration.DEFAULT_LATITUDE);
-                    location.setLongitude(Configuration.DEFAULT_LONGITUDE);
-                    new RebateHandler().execute(location);
+
                 }else{
                     //do nothing
                 }
             }
         };
         mTabHost.setOnTabChangedListener(mTabChangeListener);
-    }
-
-    private class RebateHandler extends AsyncTask {
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p/>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param params The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
-        @Override
-        protected List<Offer> doInBackground(Object... params) {
-            return mRebateFinder.getNearbyOffers((Location) params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            updateViewWithResults((ArrayList<Offer>) result);
-        };
-        /**
-         * Updates the View with the results. This is called asynchronously
-         * when the results are ready.
-         * @param result The results to be presented to the user.
-         */
-        public void updateViewWithResults(ArrayList<Offer> result) {
-            Log.d(LOG_TAG, "updateViewWithResults()");
-            ArrayList<Offer> offerArrayList = result;
-            Collections.sort(offerArrayList);
-            //Add results to listView
-            mOfferListView = (ListView) findViewById(R.id.list_view_offer);
-            mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-            mOfferListView.setAdapter(new OfferListAdapter(mContext, offerArrayList));
-            mProgressBar.setVisibility(View.GONE);
-            //Update Activity to show updated View
-            //But first remove any other child views of the parentView
-        }
-    }
-
-    public ListView getOfferListView() {
-        return mOfferListView;
     }
 }

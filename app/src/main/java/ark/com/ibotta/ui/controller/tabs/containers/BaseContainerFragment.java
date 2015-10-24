@@ -6,9 +6,11 @@ import android.util.Log;
 
 import ark.com.ibotta.R;
 
-public class BaseContainerFragment extends Fragment {
+public abstract class BaseContainerFragment extends Fragment {
+    private final static String LOG_TAG = BaseContainerFragment.class.getSimpleName();
 
     public void replaceFragment(int resId, Fragment fragment, boolean addToBackStack) {
+        Log.i(LOG_TAG, "replaceFragment(): " + getChildFragmentManager().getBackStackEntryCount());
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (addToBackStack) {
             transaction.addToBackStack(null);
@@ -19,7 +21,7 @@ public class BaseContainerFragment extends Fragment {
     }
 
     public boolean popFragment() {
-        Log.e("test", "pop fragment: " + getChildFragmentManager().getBackStackEntryCount());
+        Log.i(LOG_TAG, "popFragment(): " + getChildFragmentManager().getBackStackEntryCount());
         boolean isPop = false;
         if (getChildFragmentManager().getBackStackEntryCount() > 0) {
             isPop = true;

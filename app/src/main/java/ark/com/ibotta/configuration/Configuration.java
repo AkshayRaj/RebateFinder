@@ -7,9 +7,9 @@ import android.location.LocationManager;
  */
 public class Configuration {
     //tabhost labels
-    public static final String CATEGORY_TAB = "CATEGORY";
-    public static final String MAP_TAB = "MAP";
-    public static final String LIST_TAB = "LIST";
+    public static final String CATEGORY_TAB = "FILTER";
+    public static final String MAP_TAB = "STORES";
+    public static final String LIST_TAB = "OFFERS";
     //default configuration helpers
     public static final int INVALID = -1;
     public static final int NEARBY_RADIUS = 20;//miles
