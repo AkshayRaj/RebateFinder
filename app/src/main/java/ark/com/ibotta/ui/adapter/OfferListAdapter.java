@@ -56,7 +56,7 @@ public class OfferListAdapter extends BaseAdapter {
         OfferViewHolder offerViewHolder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.layout_list_item, parent, false);
+            convertView = mInflater.inflate(R.layout.item_offer_list, parent, false);
             offerViewHolder = new OfferViewHolder(convertView);
             convertView.setTag(offerViewHolder);
         } else {

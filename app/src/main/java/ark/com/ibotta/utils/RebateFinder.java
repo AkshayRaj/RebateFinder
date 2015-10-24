@@ -35,12 +35,7 @@ public class RebateFinder {
 
     public List<Offer> getNearbyOffers(Location pCurrentLocation){
         Log.v(LOG_TAG, "getNearbyOffers()");
-        Location currentLocation = pCurrentLocation;
-        mNearbyStoreList = mJsonStoreHelper.getNearbyStores(currentLocation);
-        Log.v(LOG_TAG, "mNearbyStoreList.size() " + mNearbyStoreList.size());
-        if(mNearbyStoreList == null){
-            return null;
-        }
+        getNearbyStores(pCurrentLocation);
         for(Store store : mNearbyStoreList){
             mNearbyRetailerSet.add(store.getRetailerId());
             Log.v(LOG_TAG, "mNearbyRetailerSet.size() " + mNearbyRetailerSet.size());
@@ -48,5 +43,17 @@ public class RebateFinder {
         mNearbyOfferList = mJsonOfferHelper.getNearbyOffers(mNearbyRetailerSet);
         Log.v(LOG_TAG, "mNearbyOfferList.size() " + mNearbyOfferList.size());
         return mNearbyOfferList;
+    }
+
+    public List<Store> getNearbyStores(Location pCurrentLocation){
+        Log.v(LOG_TAG, "getNearbyStores()");
+        Location currentLocation = pCurrentLocation;
+        List<Store> stores = mJsonStoreHelper.getNearbyStores(currentLocation);
+        Log.v(LOG_TAG, "mNearbyStoreList.size() " + stores.size());
+        mNearbyStoreList = stores;
+        if(stores == null){
+            return null;
+        }
+        return mNearbyStoreList;
     }
 }

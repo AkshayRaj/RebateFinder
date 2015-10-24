@@ -3,4 +3,6 @@
     <string name="menu_settings">Settings</string>
     <string name="button_send">GET OFFERS \nNEAR ME</string>
     <string name="title_offer_list_activity">Offers Nearby</string>
+    <string name="tab_host_tag">TAB_HOST</string>
+    <string name="fragment_default_text">TEXT HERE</string>
 </resources>

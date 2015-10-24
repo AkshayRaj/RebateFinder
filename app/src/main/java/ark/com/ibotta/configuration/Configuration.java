@@ -6,6 +6,11 @@ import android.location.LocationManager;
  * Created by Akshayraj on 10/18/15.
  */
 public class Configuration {
+    //tabhost labels
+    public static final String CATEGORY_TAB = "CATEGORY";
+    public static final String MAP_TAB = "MAP";
+    public static final String LIST_TAB = "LIST";
+    //default configuration helpers
     public static final int INVALID = -1;
     public static final int NEARBY_RADIUS = 20;//miles
     public static final String GPS_PROVIDER = LocationManager.GPS_PROVIDER;
