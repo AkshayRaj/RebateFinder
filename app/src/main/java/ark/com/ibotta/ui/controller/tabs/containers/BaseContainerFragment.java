@@ -30,4 +30,15 @@ public abstract class BaseContainerFragment extends Fragment {
         return isPop;
     }
 
+    public void addFragment(int containerViewId, Fragment childFragment, boolean addToBackStack){
+        Log.i(LOG_TAG, "addFragment(): " + getChildFragmentManager().getBackStackEntryCount());
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.add(containerViewId, childFragment);
+        transaction.commit();
+        getChildFragmentManager().executePendingTransactions();
+    }
+
 }

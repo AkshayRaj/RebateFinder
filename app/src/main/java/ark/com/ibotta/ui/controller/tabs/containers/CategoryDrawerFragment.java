@@ -3,19 +3,23 @@ package ark.com.ibotta.ui.controller.tabs.containers;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import ark.com.ibotta.R;
 import ark.com.ibotta.ui.controller.tabs.TabActivity;
 
-public class CategoryFragment extends Fragment {
-    private static final String LOG_TAG = CategoryFragment.class.getSimpleName();
-    private TabActivity mActivity;
+public class CategoryDrawerFragment extends Fragment {
+    private static final String LOG_TAG = CategoryDrawerFragment.class.getSimpleName();
     private static final String mTAG = "CATEGORY";
+    private TabActivity mActivity;
+    private DrawerLayout mDrawerLayout;
+    private ListView mListView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -26,16 +30,19 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(LOG_TAG, "onCreate()");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i(LOG_TAG, "onCreate()");
-        View fragmentView = inflater.inflate(R.layout.fragment_category, container, false);
-        TextView textView = (TextView) fragmentView.findViewById(R.id.textview_category);
-        textView.setText(mTAG + " Content");
+        Log.i(LOG_TAG, "onCreateView()");
+        View fragmentView = inflater.inflate(R.layout.drawer_category, container, false);
+        mDrawerLayout = (DrawerLayout) fragmentView.findViewById(R.id.drawer_layout);
+        if(mDrawerLayout != null){
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
         return fragmentView;
     }
 

@@ -8,38 +8,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ark.com.ibotta.R;
 import ark.com.ibotta.RebateApplication;
 import ark.com.ibotta.configuration.Configuration;
-import ark.com.ibotta.model.Store;
+import ark.com.ibotta.model.Offer;
+import ark.com.ibotta.ui.adapter.OfferListAdapter;
 import ark.com.ibotta.ui.controller.tabs.TabActivity;
 import ark.com.ibotta.utils.RebateFinder;
 
-public class MapContainerFragment extends BaseContainerFragment {
-    private static final String LOG_TAG = MapContainerFragment.class.getSimpleName();
-    static final LatLng DENVER = new LatLng(Configuration.DEFAULT_LATITUDE, Configuration.DEFAULT_LONGITUDE);
-    private TabActivity mActivity;
+public class Offer_CategoryContainer extends BaseContainerFragment {
+    private static final String LOG_TAG = Offer_CategoryContainer.class.getSimpleName();
     private boolean mIsViewInited;
-    private MyMapFragment mMapFragment;
-    private GoogleMap mGoogleMap;
+    private TabActivity mActivity;
+    private ListView mOfferListView;
+    private ProgressBar mProgressBar;
     private RebateFinder mRebateFinder;
+    private OfferListFragment mOfferListFragment;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Log.i(LOG_TAG, "onAttach()");
         mActivity = (TabActivity) activity;
+        mRebateFinder = RebateApplication.getRebateFinder();
     }
 
     @Override
@@ -51,8 +49,7 @@ public class MapContainerFragment extends BaseContainerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreateView()");
-        mRebateFinder = RebateApplication.getRebateFinder();
-        return inflater.inflate(R.layout.container_fragment_map, null);
+        return inflater.inflate(R.layout.container_offer_category, null);
     }
 
     @Override
@@ -68,16 +65,13 @@ public class MapContainerFragment extends BaseContainerFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(LOG_TAG, "onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(LOG_TAG, "onResume");
     }
 //===========FRAGMENT ACTIVE =================
-
     @Override
     public void onPause() {
         super.onPause();
@@ -107,41 +101,20 @@ public class MapContainerFragment extends BaseContainerFragment {
         super.onDetach();
         Log.i(LOG_TAG, "onDetach");
     }
-//=========FRAGMENT DESTROYED=====================
+//===========FRAGMENT DESTROYED======================
     private void initView() {
         Log.i(LOG_TAG, "initView()");
-        mMapFragment = new MyMapFragment();
-        replaceFragment(R.id.container_framelayout_map, mMapFragment, false);
-        mMapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mGoogleMap = googleMap;
-                if (mGoogleMap != null) {
-                    Location location = new Location(Configuration.NETWORK_PROVIDER);
-                    location.setLatitude(Configuration.DEFAULT_LATITUDE);
-                    location.setLongitude(Configuration.DEFAULT_LONGITUDE);
-                    new StoreLocator().execute(location);
-                }
-            }
-        });
+        Location location = new Location(Configuration.NETWORK_PROVIDER);
+        location.setLatitude(Configuration.DEFAULT_LATITUDE);
+        location.setLongitude(Configuration.DEFAULT_LONGITUDE);
+        new RebateHandler().execute(location);
+        mOfferListFragment = new OfferListFragment();
+        replaceFragment(R.id.container_framelayout_offer_list, mOfferListFragment, false);
+        addFragment(R.id.container_framelayout_offer_list, new CategoryDrawerFragment(), false);
     }
 
-    private void updateViewWithResults(ArrayList<Store> result){
-        ArrayList<Store> stores = result;
-        for(Store store : stores){
-            LatLng storelatLng = new LatLng(store.getLatitude(), store.getLongitude());
-            mGoogleMap.addMarker(new MarkerOptions()
-                    .position(storelatLng)
-                    .title(String.valueOf(store.getRetailerId())));
-        }
-        //Move the camera instantly to denver with a zoom of 15.
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DENVER, 15));
-        // Zoom in, animating the camera.
-        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-    }
-
-    private class StoreLocator extends AsyncTask{
-
+    private class RebateHandler extends AsyncTask {
+        private final String LOG_TAG = RebateHandler.class.getSimpleName();
         /**
          * Override this method to perform a computation on a background thread. The
          * specified parameters are the parameters passed to {@link #execute}
@@ -157,13 +130,32 @@ public class MapContainerFragment extends BaseContainerFragment {
          * @see #publishProgress
          */
         @Override
-        protected List<Store> doInBackground(Object[] params) {
-            return mRebateFinder.getNearbyStores((Location) params[0]);
+        protected List<Offer> doInBackground(Object... params) {
+            Log.i(LOG_TAG, "doInBackground()");
+            return mRebateFinder.getNearbyOffers((Location) params[0]);
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            updateViewWithResults((ArrayList<Store>) result);
+            Log.i(LOG_TAG, "onPostExecute()");
+            updateViewWithResults((ArrayList<Offer>) result);
+        }
+        /**
+         * Updates the View with the results. This is called asynchronously
+         * when the results are ready.
+         * @param result The results to be presented to the user.
+         */
+        public void updateViewWithResults(ArrayList<Offer> result) {
+            Log.i(LOG_TAG, "updateViewWithResults()");
+            ArrayList<Offer> offerArrayList = result;
+            Collections.sort(offerArrayList);
+            //Add results to listView
+            mOfferListView = (ListView) mActivity.findViewById(R.id.list_view_offer);
+            mOfferListView.setAdapter(new OfferListAdapter(mActivity, offerArrayList));
+            mOfferListFragment.setListView(mOfferListView);
+            mProgressBar = (ProgressBar) mActivity.findViewById(R.id.progressBar);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
+
 }
