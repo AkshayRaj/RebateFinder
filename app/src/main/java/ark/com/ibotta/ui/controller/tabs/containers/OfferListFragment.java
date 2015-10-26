@@ -35,7 +35,7 @@ public class OfferListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         Log.i(LOG_TAG, "onCreateView()");
         if(!mInit) {
             mFragmentView = inflater.inflate(R.layout.fragment_offer_list, container, false);

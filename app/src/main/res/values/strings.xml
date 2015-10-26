@@ -5,4 +5,5 @@
     <string name="title_offer_list_activity">Offers Nearby</string>
     <string name="tab_host_tag">TAB_HOST</string>
     <string name="fragment_default_text">TEXT HERE</string>
+    <string name="sample_category">Category X</string>
 </resources>

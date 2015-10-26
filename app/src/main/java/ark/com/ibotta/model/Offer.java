@@ -9,6 +9,8 @@ public class Offer implements Comparable{
     public static final String KEY_IMAGE_URL = "url";
     public static final String KEY_EARNINGS_POTENTIAL = "earnings_potential";
     public static final String KEY_EXPIRATION = "expiration";
+    public static final String KEY_CATEGORY = "categories";
+    public static final String KEY_CATEGORY_NAME = "name";
 
     private int mId;
     private List<Integer> mRetailerList;
@@ -16,15 +18,17 @@ public class Offer implements Comparable{
     private String mImageURL;
     private double mEarningsPotential;
     private String mExpiration;
+    private List<String> mCategoryList;
 
     private Offer(int id, String name, List<Integer> retailerList, String imageURL,
-                  double earningsPotential, String expiration){
+                  double earningsPotential, String expiration, List<String> categoryList){
         mId = id;
         mRetailerList = retailerList;
         mName = name;
         mImageURL = imageURL;
         mEarningsPotential = earningsPotential;
         mExpiration = expiration;
+        mCategoryList = categoryList;
     }
 
     public List<Integer> getRetailerList() {
@@ -83,6 +87,14 @@ public class Offer implements Comparable{
         this.mExpiration = mExpiration;
     }
 
+    public List<String> getCategoryList() {
+        return mCategoryList;
+    }
+
+    public void setCategoryList(List<String> categoryList){
+        mCategoryList = categoryList;
+    }
+
     public static class OfferBuilder {
         private int OfferBuilder_mId;
         private List<Integer> OfferBuilder_mRetailerList;
@@ -90,6 +102,7 @@ public class Offer implements Comparable{
         private String OfferBuilder_mImageURL;
         private double OfferBuilder_mEarningsPotential;
         private String OfferBuilder_mExpiration;
+        private List<String> OfferBuilder_mCategoryList;
 
         public OfferBuilder(){
 
@@ -101,7 +114,8 @@ public class Offer implements Comparable{
                     OfferBuilder_mRetailerList,
                     OfferBuilder_mImageURL,
                     OfferBuilder_mEarningsPotential,
-                    OfferBuilder_mExpiration);
+                    OfferBuilder_mExpiration,
+                    OfferBuilder_mCategoryList);
         }
 
         public List<Integer> getRetailerList() {
@@ -158,5 +172,13 @@ public class Offer implements Comparable{
             return this;
         }
 
+        public OfferBuilder setCategoryList(List<String> categoryList) {
+            OfferBuilder_mCategoryList = categoryList;
+            return this;
+        }
+
+        public List<String> getCategoryList() {
+            return OfferBuilder_mCategoryList;
+        }
     }
 }

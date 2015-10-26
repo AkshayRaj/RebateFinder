@@ -92,6 +92,7 @@ public class JsonOfferHelper {
         String imageURL = "";
         String expiration = "";
         double earningsPotential = Configuration.INVALID;
+        List<String> categoryList = new ArrayList<String>();
         reader.beginObject();
         while (reader.hasNext()) {
             String objectKey = reader.nextName();
@@ -107,7 +108,9 @@ public class JsonOfferHelper {
                 earningsPotential = reader.nextDouble();
             } else if(objectKey.equals(Offer.KEY_EXPIRATION)){
                 expiration = reader.nextString();
-            } else{
+            } //else if (objectKey.equals(Offer.KEY_CATEGORY)) {
+                //categoryList = readCategories(reader);//skip reading offers for now..}
+            else {
                 reader.skipValue();
             }
         }
@@ -119,7 +122,33 @@ public class JsonOfferHelper {
                 .setImageURL(imageURL)
                 .setEarningsPotential(earningsPotential)
                 .setExpiration(expiration)
+                .setCategoryList(categoryList)
                 .create();
+    }
+
+    private static List<String> readCategories(JsonReader reader) throws IOException {
+        List<String> categories = new ArrayList<String>();
+        reader.beginArray();
+        while (reader.hasNext()) {
+            categories = readCategoryObjectInArray(reader);
+        }
+        reader.endArray();
+        return categories;
+    }
+
+    private static List<String> readCategoryObjectInArray(JsonReader reader) throws IOException {
+        List<String> categories = new ArrayList<String>();
+        reader.beginObject();
+        while(reader.hasNext()){
+            String objectKey = reader.nextName();
+            if (objectKey.equals(Offer.KEY_CATEGORY_NAME)) {
+                categories.add(reader.nextString());
+            }  else{
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return categories;
     }
 
     private static List<Integer> getRetailerList(JsonReader reader) throws IOException {

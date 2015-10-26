@@ -27,10 +27,11 @@ public class Offer_CategoryContainer extends BaseContainerFragment {
     private static final String LOG_TAG = Offer_CategoryContainer.class.getSimpleName();
     private boolean mIsViewInited;
     private TabActivity mActivity;
+    //OfferList
     private ListView mOfferListView;
     private ProgressBar mProgressBar;
-    private RebateFinder mRebateFinder;
     private OfferListFragment mOfferListFragment;
+    private RebateFinder mRebateFinder;
 
     @Override
     public void onAttach(Activity activity) {
@@ -107,14 +108,14 @@ public class Offer_CategoryContainer extends BaseContainerFragment {
         Location location = new Location(Configuration.NETWORK_PROVIDER);
         location.setLatitude(Configuration.DEFAULT_LATITUDE);
         location.setLongitude(Configuration.DEFAULT_LONGITUDE);
-        new RebateHandler().execute(location);
+        new OfferRetrivalTask().execute(location);
         mOfferListFragment = new OfferListFragment();
         replaceFragment(R.id.container_framelayout_offer_list, mOfferListFragment, false);
         addFragment(R.id.container_framelayout_offer_list, new CategoryDrawerFragment(), false);
     }
 
-    private class RebateHandler extends AsyncTask {
-        private final String LOG_TAG = RebateHandler.class.getSimpleName();
+    private class OfferRetrivalTask extends AsyncTask {
+        private final String LOG_TAG = OfferRetrivalTask.class.getSimpleName();
         /**
          * Override this method to perform a computation on a background thread. The
          * specified parameters are the parameters passed to {@link #execute}

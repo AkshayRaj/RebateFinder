@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import ark.com.ibotta.R;
+import ark.com.ibotta.jsonhelpers.JsonCategoryHelper;
+import ark.com.ibotta.ui.adapter.CategoryListAdapter;
 import ark.com.ibotta.ui.controller.tabs.TabActivity;
 
 public class CategoryDrawerFragment extends Fragment {
@@ -19,7 +21,8 @@ public class CategoryDrawerFragment extends Fragment {
     private static final String mTAG = "CATEGORY";
     private TabActivity mActivity;
     private DrawerLayout mDrawerLayout;
-    private ListView mListView;
+    //CategoryDrawer
+    private ListView mCategoryListView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -42,6 +45,8 @@ public class CategoryDrawerFragment extends Fragment {
         mDrawerLayout = (DrawerLayout) fragmentView.findViewById(R.id.drawer_layout);
         if(mDrawerLayout != null){
             mDrawerLayout.openDrawer(GravityCompat.START);
+            mCategoryListView = (ListView) fragmentView.findViewById(R.id.drawer_listview);
+            mCategoryListView.setAdapter(new CategoryListAdapter(mActivity, JsonCategoryHelper.getCategories()));
         }
         return fragmentView;
     }

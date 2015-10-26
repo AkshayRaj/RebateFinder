@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ark.com.ibotta.jsonhelpers.JsonCategoryHelper;
 import ark.com.ibotta.jsonhelpers.JsonOfferHelper;
 import ark.com.ibotta.jsonhelpers.JsonStoreHelper;
 import ark.com.ibotta.model.Offer;
@@ -19,6 +20,7 @@ public class RebateFinder {
     private Context mContext;
     private JsonStoreHelper mJsonStoreHelper;
     private JsonOfferHelper mJsonOfferHelper;
+    private JsonCategoryHelper mJsonCategoryHelper;
     private List<Store> mNearbyStoreList; //use List so we can order Stores based on distance
     private Set<Integer> mNearbyRetailerSet; //use Set to avoid duplicates of Retailers; do not see importance for ordering here
     private List<Offer> mNearbyOfferList;  //use List so we can order offers based on other flags; eg. new_flag, amount, etc.
@@ -28,9 +30,11 @@ public class RebateFinder {
         mContext = context;
         mJsonStoreHelper = JsonStoreHelper.getInstance(mContext);
         mJsonOfferHelper = JsonOfferHelper.getInstance(mContext);
+        mJsonCategoryHelper = JsonCategoryHelper.getInstance(mContext);
         mNearbyStoreList = new ArrayList<Store>();
         mNearbyRetailerSet = new HashSet<Integer>();
         mNearbyOfferList = new ArrayList<Offer>();
+        loadCategoryList();
     }
 
     public List<Offer> getNearbyOffers(Location pCurrentLocation){
@@ -52,5 +56,10 @@ public class RebateFinder {
             return null;
         }
         return mNearbyStoreList;
+    }
+
+    public void loadCategoryList(){
+        mJsonCategoryHelper.execute();
+//        Log.i(LOG_TAG, "mCategoryList.size(): " + mCategoryList.size());
     }
 }

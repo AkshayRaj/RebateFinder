@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +36,6 @@ public class OfferListAdapter extends BaseAdapter {
     public void setOfferList(List<Offer> offers){
         mOfferList = offers;
     }
-
     @Override
     public int getCount() {
         return mOfferList.size();
@@ -53,32 +53,32 @@ public class OfferListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        OfferViewHolder offerViewHolder;
+        CategoryViewHolder categoryViewHolder;
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_offer_list, parent, false);
-            offerViewHolder = new OfferViewHolder(convertView);
-            convertView.setTag(offerViewHolder);
+            categoryViewHolder = new CategoryViewHolder(convertView);
+            convertView.setTag(categoryViewHolder);
         } else {
-            offerViewHolder = (OfferViewHolder) convertView.getTag();
+            categoryViewHolder = (CategoryViewHolder) convertView.getTag();
         }
 
         Offer offer = getItem(position);
-        new PosterLoader(offerViewHolder.offerImage).execute(offer.getImageURL());
-        offerViewHolder.offerName.setText(offer.getName());
-        offerViewHolder.offerEarningPotential.setText("REBATE: \n" + String.valueOf(offer.getEarningsPotential()));
-        offerViewHolder.offerExpiration.setText("EXPIRES: \n" + offer.getExpiration());
+        new PosterLoader(categoryViewHolder.offerImage).execute(offer.getImageURL());
+        categoryViewHolder.offerName.setText(offer.getName());
+        categoryViewHolder.offerEarningPotential.setText("REBATE: \n" + String.valueOf(offer.getEarningsPotential()));
+        categoryViewHolder.offerExpiration.setText("EXPIRES: \n" + offer.getExpiration());
         return convertView;
 
     }
 
-    private class OfferViewHolder {
+    private class CategoryViewHolder {
         ImageView offerImage;
         TextView offerEarningPotential;
         TextView offerName;
         TextView offerExpiration;
 
-        public OfferViewHolder(View item) {
+        public CategoryViewHolder(View item) {
             offerImage = (ImageView) item.findViewById(R.id.offerIcon);
             offerName = (TextView) item.findViewById(R.id.offerName);
             offerEarningPotential = (TextView) item.findViewById(R.id.offerEarningPotential);

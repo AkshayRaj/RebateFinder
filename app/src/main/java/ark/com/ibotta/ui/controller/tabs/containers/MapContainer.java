@@ -120,7 +120,7 @@ public class MapContainer extends BaseContainerFragment {
                     Location location = new Location(Configuration.NETWORK_PROVIDER);
                     location.setLatitude(Configuration.DEFAULT_LATITUDE);
                     location.setLongitude(Configuration.DEFAULT_LONGITUDE);
-                    new StoreLocator().execute(location);
+                    new StoreLocatorTask().execute(location);
                 }
             }
         });
@@ -140,7 +140,7 @@ public class MapContainer extends BaseContainerFragment {
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
     }
 
-    public class StoreLocator extends AsyncTask{
+    private class StoreLocatorTask extends AsyncTask{
 
         /**
          * Override this method to perform a computation on a background thread. The
