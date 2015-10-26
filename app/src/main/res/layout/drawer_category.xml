@@ -19,7 +19,7 @@
             android:layout_height="40dp"
             android:background="@color/wallet_holo_blue_light"
             android:gravity="center"
-            android:text="DRAWER"/>
+            android:text="FILTER OFFERS"/>
         <ListView android:id="@+id/drawer_listview"
             android:layout_width="@dimen/filter_category"
             android:layout_height="match_parent"
