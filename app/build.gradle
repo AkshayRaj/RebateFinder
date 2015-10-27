@@ -10,8 +10,8 @@ android {
         applicationId "ark.com.ibotta"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -25,7 +25,10 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-  signingConfigs {
+    lintOptions {
+        abortOnError false
+    }
+    signingConfigs {
         release {
             def propsFile = file("${keystore_location}")
             def configName = 'release'

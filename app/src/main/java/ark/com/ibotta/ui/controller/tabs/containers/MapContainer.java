@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,18 +37,33 @@ public class MapContainer extends BaseContainerFragment {
     private StoreMapFragment mMapFragment;
     private GoogleMap mGoogleMap;
     private RebateFinder mRebateFinder;
+    private FragmentManager mRetainedChildFragmentManager;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Log.i(LOG_TAG, "onAttach()");
         mActivity = (TabActivity) activity;
+        if (mRetainedChildFragmentManager != null) {
+            //restore the last retained child fragment manager to the new
+            //created fragment
+            try {
+                Field childFMField = Fragment.class.getDeclaredField("mChildFragmentManager");
+                childFMField.setAccessible(true);
+                childFMField.set(this, mRetainedChildFragmentManager);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "onCreate()");
+        setRetainInstance(true);
     }
 
     @Override
@@ -59,6 +77,10 @@ public class MapContainer extends BaseContainerFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(LOG_TAG, "onActivityCreated()");
+        if (savedInstanceState != null) {
+            //Restore fragment state in onActivityCreated()
+            onViewStateRestored(savedInstanceState);
+        }
         if (!mIsViewInited) {
             mIsViewInited = true;
             initView();
@@ -105,9 +127,25 @@ public class MapContainer extends BaseContainerFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.i(LOG_TAG, "onDetach");
+        Log.i(LOG_TAG, "onDetach()");
     }
 //=========FRAGMENT DESTROYED=====================
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(LOG_TAG, "onSaveInstanceState()");
+        childFragmentManager().putFragment(outState, "MAPFRAGMENT",mMapFragment);
+    }
+
+    private FragmentManager childFragmentManager() {
+    //!!!Use this instead of getFragmentManager, support library from 20+,
+    // has a bug that doesn't retain instance of nested fragments!!!!
+        if(mRetainedChildFragmentManager == null) {
+            mRetainedChildFragmentManager = getChildFragmentManager();
+        }
+        return mRetainedChildFragmentManager;
+    }
+
     private void initView() {
         Log.i(LOG_TAG, "initView()");
         mMapFragment = new StoreMapFragment();

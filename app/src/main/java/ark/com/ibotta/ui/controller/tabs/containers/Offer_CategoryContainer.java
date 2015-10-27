@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +34,9 @@ public class Offer_CategoryContainer extends BaseContainerFragment {
     private ListView mOfferListView;
     private ProgressBar mProgressBar;
     private OfferListFragment mOfferListFragment;
+    private CategoryDrawerFragment mCategoryDrawerFragment;
     private RebateFinder mRebateFinder;
+    private FragmentManager mRetainedChildFragmentManager;
 
     @Override
     public void onAttach(Activity activity) {
@@ -39,12 +44,26 @@ public class Offer_CategoryContainer extends BaseContainerFragment {
         Log.i(LOG_TAG, "onAttach()");
         mActivity = (TabActivity) activity;
         mRebateFinder = RebateApplication.getRebateFinder();
+        if (mRetainedChildFragmentManager != null) {
+            //restore the last retained child fragment manager to the new
+            //created fragment
+            try {
+                Field childFMField = Fragment.class.getDeclaredField("mChildFragmentManager");
+                childFMField.setAccessible(true);
+                childFMField.set(this, mRetainedChildFragmentManager);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "onCreate()");
+        setRetainInstance(true);
     }
 
     @Override
@@ -57,6 +76,10 @@ public class Offer_CategoryContainer extends BaseContainerFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(LOG_TAG, "onActivityCreated()");
+        if (savedInstanceState != null) {
+            //Restore fragment state in onActivityCreated()
+            onViewStateRestored(savedInstanceState);
+        }
         if (!mIsViewInited) {
             mIsViewInited = true;
             initView();
@@ -103,6 +126,23 @@ public class Offer_CategoryContainer extends BaseContainerFragment {
         Log.i(LOG_TAG, "onDetach");
     }
 //===========FRAGMENT DESTROYED======================
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(LOG_TAG, "onSaveInstanceState()");
+        childFragmentManager().putFragment(outState, "OFFERLISTFRAGMENT", mOfferListFragment);
+        childFragmentManager().putFragment(outState, "CATEGORYDRAWERFRAGMENT", mCategoryDrawerFragment);
+    }
+
+    private FragmentManager childFragmentManager() {
+    //!!!Use this instead of getFragmentManager, support library from 20+,
+    // has a bug that doesn't retain instance of nested fragments!!!!
+        if(mRetainedChildFragmentManager == null) {
+        mRetainedChildFragmentManager = getChildFragmentManager();
+        }
+        return mRetainedChildFragmentManager;
+    }
+
     private void initView() {
         Log.i(LOG_TAG, "initView()");
         Location location = new Location(Configuration.NETWORK_PROVIDER);
@@ -110,12 +150,12 @@ public class Offer_CategoryContainer extends BaseContainerFragment {
         location.setLongitude(Configuration.DEFAULT_LONGITUDE);
         new OfferRetrivalTask().execute(location);
         mOfferListFragment = new OfferListFragment();
+        mCategoryDrawerFragment = new CategoryDrawerFragment();
         replaceFragment(R.id.container_framelayout_offer_list, mOfferListFragment, false);
-        addFragment(R.id.container_framelayout_offer_list, new CategoryDrawerFragment(), false);
+        addFragment(R.id.container_framelayout_offer_list, mCategoryDrawerFragment, false);
     }
 
     private class OfferRetrivalTask extends AsyncTask {
-        private final String LOG_TAG = OfferRetrivalTask.class.getSimpleName();
         /**
          * Override this method to perform a computation on a background thread. The
          * specified parameters are the parameters passed to {@link #execute}

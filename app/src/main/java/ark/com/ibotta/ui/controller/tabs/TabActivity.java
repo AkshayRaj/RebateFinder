@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
+import android.util.Log;
 import android.widget.TabHost;
 
 import ark.com.ibotta.R;
@@ -29,10 +30,10 @@ public class TabActivity extends FragmentActivity {
     private TabHost.OnTabChangeListener mTabChangeListener;
     public RebateFinder mRebateFinder;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_tab);
         mBundle = savedInstanceState;
         mFragmentManager = getSupportFragmentManager();
@@ -45,5 +46,43 @@ public class TabActivity extends FragmentActivity {
         mTabHost.addTab(mTabHost.newTabSpec(TAB3).setIndicator(TAB3, null),
                 Offer_CategoryContainer.class, null);
         mTabHost.setCurrentTab(TAB_ON_LAUNCH - 1);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(LOG_TAG, "onStart()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(LOG_TAG, "onResume()");
+    }
+//================ ACTIVITY RUNNING ======================
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(LOG_TAG, "onPause()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(LOG_TAG, "onStop()");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(LOG_TAG, "onRestart()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(LOG_TAG, "onDestroy()");
     }
 }
