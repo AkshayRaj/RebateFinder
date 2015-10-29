@@ -10,8 +10,10 @@ android {
         applicationId "ark.com.ibotta"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
+        //default test config
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -53,9 +55,16 @@ android {
     }
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //test dependencies
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:support-v4:22.1.0'
+    androidTestCompile 'com.android.support:support-annotations:22.+'//support annotations version should same as for app
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    androidTestCompile 'com.android.support.test:rules:0.3'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
+    //app dependencies
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-annotations:22.2.0'//support annotations version should same as for androidTest
+    compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:cardview-v7:22.0.+'
     compile 'com.android.support:recyclerview-v7:22.0.+'
     compile 'com.android.support:design:22.+'
