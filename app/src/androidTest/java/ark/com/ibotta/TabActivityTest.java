@@ -9,25 +9,15 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeUp;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.pm.ActivityInfo;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.action.GeneralLocation;
-import android.support.test.espresso.action.GeneralSwipeAction;
-import android.support.test.espresso.action.Press;
-import android.support.test.espresso.action.Swipe;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.base.UiControllerImpl_Factory;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 
 import ark.com.ibotta.configuration.Configuration;
 import ark.com.ibotta.ui.controller.tabs.TabActivity;
-import ark.com.ibotta.uiactionhelpers.OrientationChangeAction;
 
 @RunWith(AndroidJUnit4.class)
 public class TabActivityTest {
