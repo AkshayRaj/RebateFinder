@@ -10,6 +10,7 @@
         android:layout_height="match_parent" />
     <!-- The navigation drawer -->
     <LinearLayout
+        android:id="@+id/drawer_listview_container"
         android:layout_width="@dimen/filter_category"
         android:layout_height="match_parent"
         android:orientation="vertical"
